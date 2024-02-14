@@ -4,14 +4,17 @@
         data division.
         working-storage section.
 
-        01 WS-CMD-BOOL          pic 9 value 0.
-        01 WS-IsClosing-BOOL    pic 9 value 0.
+        01 WS-CMD-BOOL          pic 9 value 0. *> Bool for controls
+        01 WS-IsClosing-BOOL    pic 9 value 0. *> Stores if we should close the window
 
+        *> Window data
         01 WS-Window.
             05 WS-WindowPos-NUM.
                 10 WS-WindowX-NUM pic 9(3) value 800.
                 10 WS-WindowY-NUM pic 9(3) value 600.
+            05 WS-WindowTitle-STR pic x(16) value "City Builder".
 
+        *> Stores a list of loaded tile images
         01 WS-Tiles-NUM         pic 9 occurs 100 times.
 
         copy rl-keys.
@@ -21,15 +24,15 @@
         procedure division.
         main-procedure.
 
-        perform init.
-        perform loop.
-        perform dispose.
+        perform init.       *> Initialise the games data, and window
+        perform loop.       *> Game logic loop
+        perform dispose.    *> Clear data now the game is closed
 
         init section.
             call "SetTraceLogLevel" using by value rl-log-error end-call
             call "InitWindow" using
                 by value WS-WindowX-NUM WS-WindowY-NUM
-                by reference "City Builder"
+                by reference WS-WindowTitle-STR
             end-call
             call "SetTargetFPS" using by value 60 end-call
         .
